@@ -12,14 +12,19 @@
 
 <body>
   <div id="app" class="w3-container">
-  <header>
-    <div class="w3-container w3-center w3-xxxlarge w3-padding-16">
-      수제마카롱 2.0
-    </div>
-  </header>
-  <main class="w3-row-padding">
-      <div v-for="(menu,index) in menus" class="w3-col s4 m4 l4">
+    <header>
+      <div class="w3-container w3-center w3-xxxlarge w3-padding-16">
+        수제마카롱 2.0
+      </div>
+    </header>
+    <main class="w3-row-padding">
+      <div v-for="(menu,index) in menus.slice(0,3)" class="w3-col s4 m4 l4">
         <macaron :kr-menu=menu.krMenu :eng-menu=menu.engMenu :path=menu.path @sold-out="pushList" @on-sale="popList"></macaron>
+      </div>
+      <div class="w3-row-padding">
+        <div v-for="(menu,index) in menus.slice(3)" class="w3-col s4 m4 l4">
+          <macaron :kr-menu=menu.krMenu :eng-menu=menu.engMenu :path=menu.path @sold-out="pushList" @on-sale="popList"></macaron>
+        </div>
       </div>
       <div id="soldout-list" v-if='soldOutMenus.length > 0' class="soldout w3-container">
         <p>Soldout Menu(s) :</p>
@@ -27,7 +32,7 @@
           <li v-for="menu in soldOutMenus" class="w3-col s4 m4 l4">{{ menu.krMenu }}<br>{{menu.engMenu}}</li>
         </ul>
       </div>
-  </main>
+    </main>
   </div>
   <footer>
     <ul class="w3-display-bottom w3-center w3-ul">
@@ -66,8 +71,10 @@
             this.gray = 'w3-grayscale-max'
             this.isSoldout = true
             var menuName = this.krMenu + ' ' + '(' + this.engMenu + ')'
-            this.$emit('sold-out', {krMenu : this.krMenu,
-            engMenu : this.engMenu})
+            this.$emit('sold-out', {
+              krMenu: this.krMenu,
+              engMenu: this.engMenu
+            })
           } else {
             this.gray = ''
             this.isSoldout = false
