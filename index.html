@@ -26,12 +26,12 @@
           <macaron :kr-menu=menu.krMenu :eng-menu=menu.engMenu :path=menu.path @sold-out="pushList" @on-sale="popList"></macaron>
         </div>
       </div>
-      <div id="soldout-list" v-if='soldOutMenus.length > 0' class="soldout w3-container">
+      <!-- <div id="soldout-list" v-if='soldOutMenus.length > 0' class="soldout w3-container">
         <p>Soldout Menu(s) :</p>
         <ul class="w3-row-padding">
           <li v-for="menu in soldOutMenus" class="w3-col s4 m4 l4">{{ menu.krMenu }}<br>{{menu.engMenu}}</li>
         </ul>
-      </div>
+      </div> -->
     </main>
   </div>
   <footer>
@@ -43,7 +43,6 @@
       <li>예약구매는 구매일 2~3일 전에 instagram : @klyutch_seoul / 010-8903-1351 문자예약으로 가능하며<br>당일 예약 구매는 마카롱 재고에 따라 상이합니다.</li>
     </ul>
   </footer>
-  <!--이미지 눌렀을 떄  -->
   <script>
     Vue.component('macaron', {
       props: {
