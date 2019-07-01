@@ -1,10 +1,15 @@
 Vue.component('tabButton', {
-  props:{
-    buttonName : String
+  props: {
+    buttonName: String
   },
-  template : `
-  <button class='w3-button'>{{buttonName}}</button>
-  `
+  template: `
+  <button @click='buttonPressed' class='w3-button'>{{buttonName}}</button>
+  `,
+  methods: {
+    buttonPressed() {
+      this.$emit('menu-select', this.buttonName)
+    }
+  }
 })
 Vue.component('macaron', {
   props: {
@@ -31,7 +36,6 @@ Vue.component('macaron', {
       if (!this.isSoldout) {
         this.gray = 'w3-grayscale-max'
         this.isSoldout = true
-        var menuName = this.krMenu + ' ' + '(' + this.engMenu + ')'
         this.$emit('sold-out', {
           krMenu: this.krMenu,
           engMenu: this.engMenu
@@ -44,6 +48,22 @@ Vue.component('macaron', {
     }
   }
 })
+
+Vue.component('beverage', {
+  props: {
+    krMenu: String,
+    engMenu: String,
+    price: String
+  },
+  template: `
+  <div class="w3-center">
+  <span class="w3-large">{{krMenu}}  </span>
+  <span class="w3-large">({{engMenu}})  </span>
+  <span class="w3-large">{{price}}</span>
+  </div>
+  `
+})
+
 var app = new Vue({
   el: '#app',
   methods: {
@@ -54,10 +74,20 @@ var app = new Vue({
       this.soldOutMenus.pop(menuName)
     },
     menuChange(id) {
-      console.log('hi');
+      //console.log(id)
+      if (id === '마카롱') {
+        this.macaronMenu = true
+        this.beverageMenu = false
+      }
+      if (id === '음료') {
+        this.beverageMenu = true
+        this.macaronMenu = false
+      }
     }
   },
   data: {
+    macaronMenu: true,
+    beverageMenu: false,
     Mmenus: [{
         krMenu: '앙쑥(2.2)',
         engMenu: 'Sediment wormwood',
@@ -91,7 +121,115 @@ var app = new Vue({
     ],
     soldOutMenus: [],
     Bmenus: [{
-
-    }]
+        krMenu: '에스프레소',
+        engMenu: 'Espresso',
+        price: 3.0
+      },
+      {
+        krMenu: '아메리카노',
+        engMenu: 'Americano',
+        price: 3.0
+      },
+      {
+        krMenu: '카페라테',
+        engMenu: 'Cafe Latte',
+        price: 3.5
+      },
+      {
+        krMenu: '바닐라라테',
+        engMenu: 'Vanilla Latte',
+        price: 4.0
+      },
+      {
+        krMenu: '플랫화이트',
+        engMenu: 'Flat White',
+        price: 3.5
+      },
+      {
+        krMenu: '샷추가',
+        engMenu: 'add shot',
+        price: 1.0
+      },
+      {
+        krMenu: '딸기라테',
+        engMenu: 'Strawberry Latte',
+        price: 4.0
+      },
+      {
+        krMenu: '말차라테',
+        engMenu: 'Matcha Latte',
+        price: 4.0
+      },
+      {
+        krMenu: '히비스커스 티/에이드',
+        engMenu: 'Hibiscus Tea/Ade',
+        price: 4.5
+      },
+      {
+        krMenu: '월간 클류티',
+        engMenu: 'Monthly Klyuch Tea',
+        price: 4.0
+      },
+      {
+      krMenu: '카모마일',
+        engMenu: 'Chamomile Tea',
+        price: 4.0
+      },
+      {
+        krMenu: '카모마일 레몬',
+        engMenu: 'Chamomile Lemon Tea',
+        price: 4.5
+      },
+      {
+        krMenu: '생맥주',
+        engMenu: 'Lager',
+        price: 4.0
+      },
+      {
+        krMenu: '유자맥주',
+        engMenu: 'Citron Lager',
+        price: 4.5
+      },
+      {
+        krMenu: '유자보드카',
+        engMenu: 'Citron Vodka',
+        price: 5.5
+      },
+      {
+        krMenu: '깔루아밀크',
+        engMenu: 'Kahlua Milk',
+        price: 5.5
+      },
+      {
+        krMenu: '럼 추가',
+        engMenu: 'add Rum',
+        price: 1.5
+      },
+      {
+        krMenu: '밀크티',
+        engMenu: 'Milk Tea',
+        price: 3.5
+      },
+      {
+        krMenu: '초콜렛',
+        engMenu: 'Chocolate',
+        price: 4.0
+      },
+      {
+        krMenu: '흑당 밀크티',
+        engMenu: 'Brown Sugar Milk Tea',
+        price: 3.5
+      },
+      {
+        krMenu: '흑당 펄 밀크티',
+        engMenu: 'B.W Sugar Pearl Milk Tea',
+        price: 4.0
+      },
+      {
+        krMenu: '흑당 말차라테',
+        engMenu: 'B.W Sugar Match Latte',
+        price: 4.0
+      }
+    ]
   }
 })
