@@ -8,126 +8,68 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="w3.css">
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
 </head>
 
 <body>
   <div id="app" class="w3-container">
     <header>
-      <div class="w3-container w3-center w3-xxxlarge w3-padding-16">
-        수제마카롱 2.0
-      </div>
+      <tab-button @menu-select="menuChange" button-name="마카롱"></tab-button>
+      <tab-button @menu-select="menuChange" button-name="음료"></tab-button>
     </header>
-    <main class="w3-row-padding">
-      <div v-for="(menu,index) in menus.slice(0,3)" class="w3-col s4 m4 l4">
-        <macaron :kr-menu=menu.krMenu :eng-menu=menu.engMenu :path=menu.path @sold-out="pushList" @on-sale="popList"></macaron>
+    <main>
+      <div v-show="macaronMenu" class="macaronMenus">
+        <div class="w3-container w3-center w3-xxxlarge w3-padding-16">
+          수제마카롱 2.0
+        </div>
+        <div class="macaronRowA w3-row-padding">
+          <div v-for="(menu,index) in Mmenus.slice(0,3)" class="w3-col s4 m4 l4">
+            <macaron :kr-menu=menu.krMenu :eng-menu=menu.engMenu :path=menu.path @sold-out="pushList" @on-sale="popList"></macaron>
+          </div>
+        </div>
+        <div class="macaronRowB w3-row-padding">
+          <div v-for="(menu,index) in Mmenus.slice(3)" class="w3-col s4 m4 l4">
+            <macaron :kr-menu=menu.krMenu :eng-menu=menu.engMenu :path=menu.path @sold-out="pushList" @on-sale="popList"></macaron>
+          </div>
+        </div>
+        <ul class="w3-display-bottom w3-center w3-ul">
+          <li>구입하신 마카롱은 당일 먹는 것이 가장 좋으며 보관은 밀폐용기에 담아 보관해주시기 바랍니다.<br>
+            <div class="w3-text-red">냉장 보관 ~3일 냉동보관 ~2주</div>
+          </li>
+          <li>클류치 마카롱은 냉장 보관 후 상온에서 5분정도 해동한 뒤 드시는 것이 가장 맛있습니다.</li>
+          <li>예약구매는 구매일 2~3일 전에 instagram : @klyutch_seoul / 010-8903-1351 문자예약으로 가능하며<br>당일 예약 구매는 마카롱 재고에 따라 상이합니다.</li>
+        </ul>
       </div>
-      <div class="w3-row-padding">
-        <div v-for="(menu,index) in menus.slice(3)" class="w3-col s4 m4 l4">
-          <macaron :kr-menu=menu.krMenu :eng-menu=menu.engMenu :path=menu.path @sold-out="pushList" @on-sale="popList"></macaron>
+      <div v-show="beverageMenu" class="beverageMenus w3-row-padding w3-center">
+        <h1 class="w3-xxxlarge">클류치 음료 메뉴</h1>
+        <div class="Espresso w3-col s3 m3 l3">
+          <h1 class="w3-center">에스프레소</h1>
+          <div v-for="bmenu in Bmenus.slice(0,6)">
+            <beverage :kr-menu=bmenu.krMenu :eng-menu=bmenu.engMenu :price=bmenu.price.toFixed(1)></beverage>
+          </div>
+        </div>
+        <div class="nonAlchol w3-col s3 m3 l3">
+          <h1 class="w3-center">음료</h1>
+          <div v-for="bmenu in Bmenus.slice(6,12)">
+            <beverage :kr-menu=bmenu.krMenu :eng-menu=bmenu.engMenu :price=bmenu.price.toFixed(1)></beverage>
+          </div>
+        </div>
+        <div class="Alchol w3-col s3 m3 l3">
+          <h1 class="w3-center">주류</h1>
+          <div v-for="bmenu in Bmenus.slice(12,17)">
+            <beverage :kr-menu=bmenu.krMenu :eng-menu=bmenu.engMenu :price=bmenu.price.toFixed(1)></beverage>
+          </div>
+        </div>
+        <div class="limited w3-col s3 m3 l3">
+          <h1 class="w3-center">한정 음료</h1>
+          <div v-for="bmenu in Bmenus.slice(17)">
+            <beverage :kr-menu=bmenu.krMenu :eng-menu=bmenu.engMenu :price=bmenu.price.toFixed(1)></beverage>
+          </div>
         </div>
       </div>
-      <!-- <div id="soldout-list" v-if='soldOutMenus.length > 0' class="soldout w3-container">
-        <p>Soldout Menu(s) :</p>
-        <ul class="w3-row-padding">
-          <li v-for="menu in soldOutMenus" class="w3-col s4 m4 l4">{{ menu.krMenu }}<br>{{menu.engMenu}}</li>
-        </ul>
-      </div> -->
     </main>
   </div>
-  <footer>
-    <ul class="w3-display-bottom w3-center w3-ul">
-      <li>구입하신 마카롱은 당일 먹는 것이 가장 좋으며 보관은 밀폐용기에 담아 보관해주시기 바랍니다.<br>
-        <div class="w3-text-red">냉장 보관 ~3일 냉동보관 ~2주</div>
-      </li>
-      <li>클류치 마카롱은 냉장 보관 후 상온에서 5분정도 해동한 뒤 드시는 것이 가장 맛있습니다.</li>
-      <li>예약구매는 구매일 2~3일 전에 instagram : @klyutch_seoul / 010-8903-1351 문자예약으로 가능하며<br>당일 예약 구매는 마카롱 재고에 따라 상이합니다.</li>
-    </ul>
-  </footer>
-  <script>
-    Vue.component('macaron', {
-      props: {
-        krMenu: String,
-        engMenu: String,
-        path: String
-      },
-      template: `
-      <div class="w3-center">
-        <img @click='colorChange'  :src=path :alt=krMenu :class = gray :isSoldout = false class="w3-image" style="width:100%" >
-        <p class="w3-large">{{krMenu}}<br>({{engMenu}})</p>
-      </div>
-      `,
-      data() {
-        return {
-          // krMenu : '테스트',
-          // engMenu : 'testMenu',
-          // img: 'assets/menu6.png',
-          gray: ''
-        }
-      },
-      methods: {
-        colorChange() {
-          if (!this.isSoldout) {
-            this.gray = 'w3-grayscale-max'
-            this.isSoldout = true
-            var menuName = this.krMenu + ' ' + '(' + this.engMenu + ')'
-            this.$emit('sold-out', {
-              krMenu: this.krMenu,
-              engMenu: this.engMenu
-            })
-          } else {
-            this.gray = ''
-            this.isSoldout = false
-            this.$emit('on-sale')
-          }
-        }
-      }
-    })
-    var app = new Vue({
-      el: '#app',
-      methods: {
-        pushList(menuName) {
-          this.soldOutMenus.push(menuName)
-        },
-        popList(menuName) {
-          this.soldOutMenus.pop(menuName)
-        }
-      },
-      data: {
-        menus: [{
-            krMenu: '앙쑥(2.2)',
-            engMenu: 'Sediment wormwood',
-            path: 'assets/menu1.png'
-          },
-          {
-            krMenu: '라즈베리',
-            engMenu: 'Raspberry',
-            path: 'assets/menu2.png'
-          },
-          {
-            krMenu: '얼그레이 밀크티',
-            engMenu: 'Earlgrey Milk tea',
-            path: 'assets/menu3.png'
-          },
-          {
-            krMenu: '다크가나슈',
-            engMenu: 'Darkganache',
-            path: 'assets/menu4.png'
-          },
-          {
-            krMenu: '오레오',
-            engMenu: 'Oreo',
-            path: 'assets/menu5.png'
-          },
-          {
-            krMenu: '쏠티 캐러멜',
-            engMenu: 'Salty Caramel',
-            path: 'assets/menu6.png'
-          }
-        ],
-        soldOutMenus: []
-      }
-    })
-  </script>
+  <script src="main.js"></script>
 </body>
 
 </html>
